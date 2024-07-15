@@ -11,6 +11,20 @@ namespace CarWashManagementSystem
         }
         public void SeedDataContext()
         {
+            if (!dataContext.StationAllowedIps.Any())
+            {
+                dataContext.StationAllowedIps.AddRange(
+                    new StationAllowedIp { Id = 1, StationId = 1, IpAddress = "192.168.1.30" },
+                    new StationAllowedIp { Id = 2, StationId = 2, IpAddress = "192.168.1.30" },
+                    new StationAllowedIp { Id = 3, StationId = 3, IpAddress = "192.168.1.30" },
+                    new StationAllowedIp { Id = 4, StationId = 4, IpAddress = "192.168.1.30" },
+                    new StationAllowedIp { Id = 5, StationId = 5, IpAddress = "192.168.1.30" },
+                    new StationAllowedIp { Id = 6, StationId = 6, IpAddress = "192.168.1.30" },
+                    new StationAllowedIp { Id = 7, StationId = 7, IpAddress = "192.168.1.30" },
+                    new StationAllowedIp { Id = 8, StationId = 8, IpAddress = "192.168.1.30" },
+                    new StationAllowedIp { Id = 9, StationId = 9, IpAddress = "192.168.1.30" }
+                );
+            }
             if (!dataContext.StationTypes.Any())
             {
                 dataContext.StationTypes.AddRange(

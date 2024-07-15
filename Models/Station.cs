@@ -7,5 +7,6 @@
         public int StationTypeId { get; set; }
         public StationType StationType { get; set; }
         public ICollection<Transaction> Transactions { get; set; }
+        public StationAllowedIp AllowedIp { get; set; }
     }
 }

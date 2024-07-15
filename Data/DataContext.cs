@@ -12,5 +12,6 @@ namespace CarWashManagementSystem.Data
         public DbSet<TransactionSource> TransactionSources { get; set; }
         public DbSet<Station> Stations { get; set; }
         public DbSet<StationType> StationTypes { get; set; }
+        public DbSet<StationAllowedIp> StationAllowedIps { get; set; }
     }
 }
