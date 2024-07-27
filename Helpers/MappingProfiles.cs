@@ -18,6 +18,7 @@ namespace CarWashManagementSystem.Helpers
             CreateMap<TransactionSource, TransactionSourceDto>();
 
             CreateMap<StationType, StationTypeDto>();
+            CreateMap<Station, StationInfoDto>();
         }
     }
 }
