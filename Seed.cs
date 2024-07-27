@@ -11,6 +11,20 @@ namespace CarWashManagementSystem
         }
         public void SeedDataContext()
         {
+
+            if (!dataContext.FiscSchedule.Any())
+            {
+                dataContext.FiscSchedule.AddRange(
+                    new FiscSchedule { DayOfWeek = DayOfWeek.Monday, TurnOnTime = new TimeSpan(8, 0, 0), TurnOffTime = new TimeSpan(17, 0, 0) },
+                    new FiscSchedule { DayOfWeek = DayOfWeek.Tuesday, TurnOnTime = new TimeSpan(8, 0, 0), TurnOffTime = new TimeSpan(17, 0, 0) },
+                    new FiscSchedule { DayOfWeek = DayOfWeek.Wednesday, TurnOnTime = new TimeSpan(8, 0, 0), TurnOffTime = new TimeSpan(17, 0, 0) },
+                    new FiscSchedule { DayOfWeek = DayOfWeek.Thursday, TurnOnTime = new TimeSpan(8, 0, 0), TurnOffTime = new TimeSpan(17, 0, 0) },
+                    new FiscSchedule { DayOfWeek = DayOfWeek.Friday, TurnOnTime = new TimeSpan(8, 0, 0), TurnOffTime = new TimeSpan(17, 0, 0) },
+                    new FiscSchedule { DayOfWeek = DayOfWeek.Saturday, TurnOnTime = new TimeSpan(0, 0, 0), TurnOffTime = new TimeSpan(0, 0, 0) },
+                    new FiscSchedule { DayOfWeek = DayOfWeek.Sunday, TurnOnTime = new TimeSpan(0, 0, 0), TurnOffTime = new TimeSpan(0, 0, 0) }
+                );
+            }
+
             if (!dataContext.StationAllowedIps.Any())
             {
                 dataContext.StationAllowedIps.AddRange(
@@ -36,14 +50,14 @@ namespace CarWashManagementSystem
             if (!dataContext.Stations.Any())
             {
                 dataContext.Stations.AddRange(
-                    new Station { Id = 1, StationNumber = 1, StationTypeId = 1 },
-                    new Station { Id = 2, StationNumber = 2, StationTypeId = 1 },
-                    new Station { Id = 3, StationNumber = 3, StationTypeId = 1 },
-                    new Station { Id = 4, StationNumber = 4, StationTypeId = 1 },
-                    new Station { Id = 5, StationNumber = 1, StationTypeId = 2 },
-                    new Station { Id = 6, StationNumber = 2, StationTypeId = 2 },
-                    new Station { Id = 7, StationNumber = 1, StationTypeId = 3 },
-                    new Station { Id = 8, StationNumber = 2, StationTypeId = 3 }
+                    new Station { Id = 1, StationNumber = 1, StationTypeId = 1, IsExcludedFromSchedule = false, ManualFiscState = false },
+                    new Station { Id = 2, StationNumber = 2, StationTypeId = 1, IsExcludedFromSchedule = false, ManualFiscState = false },
+                    new Station { Id = 3, StationNumber = 3, StationTypeId = 1, IsExcludedFromSchedule = false, ManualFiscState = false },
+                    new Station { Id = 4, StationNumber = 4, StationTypeId = 1, IsExcludedFromSchedule = false, ManualFiscState = false },
+                    new Station { Id = 5, StationNumber = 1, StationTypeId = 2, IsExcludedFromSchedule = false, ManualFiscState = false },
+                    new Station { Id = 6, StationNumber = 2, StationTypeId = 2, IsExcludedFromSchedule = false, ManualFiscState = false },
+                    new Station { Id = 7, StationNumber = 1, StationTypeId = 3, IsExcludedFromSchedule = false, ManualFiscState = false },
+                    new Station { Id = 8, StationNumber = 2, StationTypeId = 3, IsExcludedFromSchedule = false, ManualFiscState = false }
                 );
             }
             if (!dataContext.TransactionSources.Any())
