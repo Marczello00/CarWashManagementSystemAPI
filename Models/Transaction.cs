@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace CarWashManagementSystem.Models
+﻿namespace CarWashManagementSystem.Models
 {
     public class Transaction
     {
@@ -14,4 +12,3 @@ namespace CarWashManagementSystem.Models
         public TransactionSource TransactionSource { get; set; }
     }
 }
-    

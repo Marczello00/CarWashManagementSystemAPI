@@ -5,9 +5,6 @@ using AutoMapper;
 using CarWashManagementSystem.Dtos;
 using Microsoft.EntityFrameworkCore;
 using CarWashManagementSystem.Filters;
-using System.Diagnostics;
-using Microsoft.Extensions.Logging;
-using System.Net;
 
 namespace CarWashManagementSystem.Controllers
 {
@@ -157,7 +154,7 @@ namespace CarWashManagementSystem.Controllers
             };
 
             _context.Transactions.Add(transaction);
-            _context.SaveChanges(); 
+            _context.SaveChanges();
             var transactionDto = _mapper.Map<TransactionDto>(transaction);
             return CreatedAtAction(nameof(GetTransactionById), new { id = transaction.Id }, transactionDto);
 

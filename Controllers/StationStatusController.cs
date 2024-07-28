@@ -1,6 +1,5 @@
 ﻿using CarWashManagementSystem.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CarWashManagementSystem.Controllers
 {

@@ -12,13 +12,15 @@ namespace CarWashManagementSystem.Controllers
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        public StationController(DataContext context, IMapper mapper) {
+        public StationController(DataContext context, IMapper mapper)
+        {
             _context = context;
             _mapper = mapper;
         }
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<StationInfoDto>))]
-        public IActionResult GetStations() {
+        public IActionResult GetStations()
+        {
             var stations = _context.Stations
                 .Include(s => s.StationType)
                 .ToList();

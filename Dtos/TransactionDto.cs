@@ -1,6 +1,4 @@
-﻿using CarWashManagementSystem.Models;
-
-namespace CarWashManagementSystem.Dtos
+﻿namespace CarWashManagementSystem.Dtos
 {
     public class TransactionDto
     {
