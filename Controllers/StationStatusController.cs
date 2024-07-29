@@ -29,16 +29,12 @@ namespace CarWashManagementSystem.Controllers
 
             // Sprawdź czy stacja istnieje
             if (station == null)
-            {
                 return NotFound("Station not found.");
-            }
 
             // Sprawdź czy stacja jest wyłączona z harmonogramu
             // Jeśli tak, zwróć manualny stan fiskalizacji
             if (station.IsExcludedFromSchedule)
-            {
                 return Ok(new { StationId = stationId, IsFiscOn = station.ManualFiscState });
-            }
 
             // Znajdż harmonogram dla aktualnego dnia
             var schedules = _context.FiscSchedule
