@@ -2,6 +2,7 @@
 using AutoMapper;
 using CarWashManagementSystem.Data;
 using CarWashManagementSystem.Dtos;
+using CarWashManagementSystem.Filters;
 
 namespace CarWashManagementSystem.Controllers
 {
@@ -32,10 +33,11 @@ namespace CarWashManagementSystem.Controllers
         }
 
         [HttpPut("{DayOfWeek}")]
+        [ServiceFilter(typeof(ProvisioningActionFilter))]
         [ProducesResponseType(200, Type = typeof(FiscScheduleDto))]
         [ProducesResponseType(404)]
         public IActionResult UpdateFiscSchedule(DayOfWeek DayOfWeek, UpdateFiscScheduleDto updateFiscScheduleDto)
-            {
+        {
             var fiscSchedule = _context.FiscSchedule.FirstOrDefault(s => s.DayOfWeek == DayOfWeek);
 
             if (fiscSchedule == null)
@@ -44,10 +46,6 @@ namespace CarWashManagementSystem.Controllers
             //cut off seconds
             updateFiscScheduleDto.TurnOnTime = new TimeSpan(updateFiscScheduleDto.TurnOnTime.Hours, updateFiscScheduleDto.TurnOnTime.Minutes, 0);
             updateFiscScheduleDto.TurnOffTime = new TimeSpan(updateFiscScheduleDto.TurnOffTime.Hours, updateFiscScheduleDto.TurnOffTime.Minutes, 0);
-
-            //both time mustn't be less than 1 minute
-            if (updateFiscScheduleDto.TurnOnTime < TimeSpan.FromMinutes(1) || updateFiscScheduleDto.TurnOffTime < TimeSpan.FromMinutes(1))
-                return BadRequest("Time cannot be less than 1 minute");
 
             //both time cannot be more than 23:59
             if (updateFiscScheduleDto.TurnOnTime > TimeSpan.FromHours(23) || updateFiscScheduleDto.TurnOffTime > TimeSpan.FromHours(23))
@@ -63,9 +61,12 @@ namespace CarWashManagementSystem.Controllers
 
             _mapper.Map(updateFiscScheduleDto, fiscSchedule);
             _context.SaveChanges();
+
             fiscSchedule = _context.FiscSchedule
                 .FirstOrDefault(s => s.DayOfWeek == DayOfWeek);
+
             var mapped = _mapper.Map<FiscScheduleDto>(fiscSchedule);
+
             return Ok(mapped);
         }
     }

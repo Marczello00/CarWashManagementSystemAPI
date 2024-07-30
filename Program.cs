@@ -1,5 +1,8 @@
 using CarWashManagementSystem;
 using CarWashManagementSystem.Data;
+using CarWashManagementSystem.Filters;
+using CarWashManagementSystem.Interfaces;
+using CarWashManagementSystem.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +13,11 @@ builder.Services.AddControllers();
 
 // Automapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddHttpClient();
+
+// Provisioning Service and filter
+builder.Services.AddScoped<IStationService, StationsProvisionService>();
+builder.Services.AddScoped<ProvisioningActionFilter>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

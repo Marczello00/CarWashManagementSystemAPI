@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using CarWashManagementSystem.Data;
 using CarWashManagementSystem.Dtos;
+using CarWashManagementSystem.Filters;
 
 namespace CarWashManagementSystem.Controllers
 {
@@ -31,6 +32,7 @@ namespace CarWashManagementSystem.Controllers
             return Ok(mapped);
         }
         [HttpPut("{StationId}")]
+        [ServiceFilter(typeof(ProvisioningActionFilter))]
         [ProducesResponseType(200, Type = typeof(StationAllowedIpDto))]
         [ProducesResponseType(404)]
         public IActionResult UpdateStationAllowedIp(int StationId, UpdateStationAllowedIpDto updateStationAllowedIpDto)

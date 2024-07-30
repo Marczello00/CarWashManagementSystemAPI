@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using CarWashManagementSystem.Data;
 using CarWashManagementSystem.Dtos;
+using CarWashManagementSystem.Interfaces;
+using CarWashManagementSystem.Filters;
 
 namespace CarWashManagementSystem.Controllers
 {
@@ -12,10 +14,12 @@ namespace CarWashManagementSystem.Controllers
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        public StationsController(DataContext context, IMapper mapper)
+        private readonly IStationService _stationService;
+        public StationsController(DataContext context, IMapper mapper, IStationService stationService)
         {
             _context = context;
             _mapper = mapper;
+            _stationService = stationService;
         }
 
         [HttpGet]
@@ -35,6 +39,7 @@ namespace CarWashManagementSystem.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ProvisioningActionFilter))]
         [ProducesResponseType(200, Type = typeof(StationInfoDto))]
         [ProducesResponseType(404)]
         public IActionResult UpdateStation(int id, UpdateStationDto updateStationDto)
@@ -51,6 +56,22 @@ namespace CarWashManagementSystem.Controllers
                 .FirstOrDefault(s => s.Id == id);
             var mapped = _mapper.Map<StationInfoDto>(station);
             return Ok(mapped);
+        }
+
+        [HttpPut("make-provisions")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(502)]
+        public async Task<IActionResult> MakeProvisions()
+        {
+            try
+            {
+                await _stationService.ProvisionActiveStationsAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(502, "Błąd przy provisioningu. Czy wszystkie stanowiska działają?");
+            }
         }
     }
 }
