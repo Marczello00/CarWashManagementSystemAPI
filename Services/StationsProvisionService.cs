@@ -6,34 +6,37 @@ namespace CarWashManagementSystem.Services
 {
     public class StationsProvisionService : IStationService
     {
-        private readonly DataContext _context;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<StationsProvisionService> _logger;
-        public StationsProvisionService(DataContext context, IHttpClientFactory httpClientFactory, ILogger<StationsProvisionService> logger)
+        public StationsProvisionService(IServiceScopeFactory scopeFactory, IHttpClientFactory httpClientFactory, ILogger<StationsProvisionService> logger)
         {
-            _context = context;
+            _scopeFactory = scopeFactory;
             _httpClientFactory = httpClientFactory;
             _logger = logger;
         }
         public async Task ProvisionActiveStationsAsync()
         {
-            var activeStations = await _context.Stations
-            .Include(s => s.AllowedIp)
-            .Where(s => s.IsActive)
-            .ToListAsync();
-
-            var tasks = new List<Task>();
-
-            foreach (var station in activeStations)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                if (station.AllowedIp != null)
+                var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+                var activeStations = await context.Stations
+                    .Where(s => s.IsActive)
+                    .ToListAsync();
+
+                var tasks = new List<Task>();
+
+                foreach (var station in activeStations)
                 {
-                    var url = $"http://{station.AllowedIp.IpAddress}/provision";
-                    tasks.Add(CallProvisionEndpointAsync(url));
+                    if (station.AllowedIp != null)
+                    {
+                        var url = $"http://{station.AllowedIp.IpAddress}/provision";
+                        tasks.Add(CallProvisionEndpointAsync(url));
+                    }
                 }
+                await Task.WhenAll(tasks);
             }
 
-            await Task.WhenAll(tasks);
         }
         private async Task CallProvisionEndpointAsync(string url)
         {
