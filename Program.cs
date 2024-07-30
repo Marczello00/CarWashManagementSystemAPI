@@ -31,6 +31,9 @@ builder.Services.AddDbContext<DataContext>(options =>
 }
 );
 
+// Hosted service - Checking if provisioning is needed every minute
+builder.Services.AddHostedService<ProvisioningHostedService>();
+
 // Forwarding HTTP headers from proxy
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
