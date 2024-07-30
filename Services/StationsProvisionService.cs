@@ -21,6 +21,7 @@ namespace CarWashManagementSystem.Services
             {
                 var context = scope.ServiceProvider.GetRequiredService<DataContext>();
                 var activeStations = await context.Stations
+                    .Include(s => s.AllowedIp)
                     .Where(s => s.IsActive)
                     .ToListAsync();
 
