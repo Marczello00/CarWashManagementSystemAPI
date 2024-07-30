@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using CarWashManagementSystem.Data;
 using CarWashManagementSystem.Models;
-using AutoMapper;
 using CarWashManagementSystem.Dtos;
-using Microsoft.EntityFrameworkCore;
 using CarWashManagementSystem.Filters;
 
 namespace CarWashManagementSystem.Controllers

@@ -34,15 +34,15 @@ namespace CarWashManagementSystem
             if (!dataContext.Stations.Any())
             {
                 dataContext.Stations.AddRange(
-                    new Station { Id = 1, StationNumber = 1, StationTypeId = 1, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false },
-                    new Station { Id = 2, StationNumber = 2, StationTypeId = 1, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false },
-                    new Station { Id = 3, StationNumber = 3, StationTypeId = 1, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = true },
-                    new Station { Id = 4, StationNumber = 4, StationTypeId = 1, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false },
-                    new Station { Id = 5, StationNumber = 1, StationTypeId = 2, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false },
-                    new Station { Id = 6, StationNumber = 2, StationTypeId = 2, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false },
-                    new Station { Id = 7, StationNumber = 1, StationTypeId = 3, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false },
-                    new Station { Id = 8, StationNumber = 2, StationTypeId = 3, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false },
-                    new Station { Id = 9, StationNumber = 3, StationTypeId = 3, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false }
+                    new Station { Id = 1, StationNumber = 1, StationTypeId = 1, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false, AreCashPaymentsAllowed = true, AreCardPaymentsAllowed = true },
+                    new Station { Id = 2, StationNumber = 2, StationTypeId = 1, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false, AreCashPaymentsAllowed = true, AreCardPaymentsAllowed = true },
+                    new Station { Id = 3, StationNumber = 3, StationTypeId = 1, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = true, AreCashPaymentsAllowed = true, AreCardPaymentsAllowed = true },
+                    new Station { Id = 4, StationNumber = 4, StationTypeId = 1, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false, AreCashPaymentsAllowed = true, AreCardPaymentsAllowed = true },
+                    new Station { Id = 5, StationNumber = 1, StationTypeId = 2, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false, AreCashPaymentsAllowed = true, AreCardPaymentsAllowed = true },
+                    new Station { Id = 6, StationNumber = 2, StationTypeId = 2, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false, AreCashPaymentsAllowed = true, AreCardPaymentsAllowed = true },
+                    new Station { Id = 7, StationNumber = 1, StationTypeId = 3, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false, AreCashPaymentsAllowed = true, AreCardPaymentsAllowed = true },
+                    new Station { Id = 8, StationNumber = 2, StationTypeId = 3, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false, AreCashPaymentsAllowed = true, AreCardPaymentsAllowed = true },
+                    new Station { Id = 9, StationNumber = 3, StationTypeId = 3, IsExcludedFromSchedule = false, ManualFiscState = false, IsActive = false, AreCashPaymentsAllowed = true, AreCardPaymentsAllowed = true }
                 );
             }
             if (!dataContext.TransactionSources.Any())

@@ -19,6 +19,8 @@ namespace CarWashManagementSystem.Helpers
 
             CreateMap<StationType, StationTypeDto>();
             CreateMap<Station, StationInfoDto>();
+            CreateMap<Station, StationStatusDto>()
+                .ForMember(dest => dest.IsFiscOn, opt => opt.MapFrom(src => src.ManualFiscState));
         }
     }
 }

@@ -8,6 +8,8 @@
         public bool IsExcludedFromSchedule { get; set; }
         public bool ManualFiscState { get; set; }
         public bool IsActive { get; set; }
+        public bool AreCashPaymentsAllowed { get; set; }
+        public bool AreCardPaymentsAllowed { get; set; }
         public StationType StationType { get; set; }
         public ICollection<Transaction> Transactions { get; set; }
         public StationAllowedIp AllowedIp { get; set; }

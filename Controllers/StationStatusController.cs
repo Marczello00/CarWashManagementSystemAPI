@@ -1,5 +1,8 @@
-﻿using CarWashManagementSystem.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using CarWashManagementSystem.Data;
+using CarWashManagementSystem.Dtos;
 
 namespace CarWashManagementSystem.Controllers
 {
@@ -8,33 +11,40 @@ namespace CarWashManagementSystem.Controllers
     public class StationStatusController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public StationStatusController(DataContext context)
+        public StationStatusController(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        [HttpGet("{stationId}")]
-        [ProducesResponseType(200)]
+        [HttpGet]
+        [ProducesResponseType(200, Type = typeof(StationStatusDto))]
         [ProducesResponseType(404)]
-
-        public IActionResult GetStationStatus(int stationId)
+        public IActionResult GetStationStatus(short stationNumber, string stationTypeName)
         {
-            //Aktualny dzień i czas
-            var now = DateTime.Now;
-            var currentDayOfWeek = now.DayOfWeek;
-            var currentTime = now.TimeOfDay;
-
-            var station = _context.Stations.Find(stationId);
+            var station = _context.Stations
+                .Include(s => s.StationType)
+                .FirstOrDefault(s => s.StationNumber == stationNumber && s.StationType.StationTypeName == stationTypeName);
 
             // Sprawdź czy stacja istnieje
             if (station == null)
                 return NotFound("Station not found.");
 
-            // Sprawdź czy stacja jest wyłączona z harmonogramu
-            // Jeśli tak, zwróć manualny stan fiskalizacji
-            if (station.IsExcludedFromSchedule)
-                return Ok(new { StationId = stationId, IsFiscOn = station.ManualFiscState });
+            var mapped = _mapper.Map<StationStatusDto>(station);
+
+            if (!station.IsExcludedFromSchedule)
+                mapped.IsFiscOn = CalculateFiscStateFromSchedule();
+
+            return Ok(mapped);
+        }
+        private bool CalculateFiscStateFromSchedule()
+        {
+            //Aktualny dzień i czas
+            var now = DateTime.Now;
+            var currentDayOfWeek = now.DayOfWeek;
+            var currentTime = now.TimeOfDay;
 
             // Znajdż harmonogram dla aktualnego dnia
             var schedules = _context.FiscSchedule
@@ -43,13 +53,11 @@ namespace CarWashManagementSystem.Controllers
 
             // Sprawdź czy fiskalizacja jest włączona w harmonogramie
             // Jeśli tak, zwróć stan włączony
-            // Jeśli nie (Harmonogram:00:00:00-00:00:00), zwróć stan wyłączony
-            var isOn = schedules.Any(s =>
+            // Jeśli nie (Harmonogram->00:00:00-00:00:00), zwróć stan wyłączony
+            return schedules.Any(s =>
                 (s.TurnOnTime == TimeSpan.Zero && s.TurnOffTime == TimeSpan.Zero)
                 ? false
                 : (s.TurnOnTime <= currentTime && s.TurnOffTime >= currentTime));
-
-            return Ok(new { StationId = stationId, IsFiscOn = isOn });
         }
     }
 }
