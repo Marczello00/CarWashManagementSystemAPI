@@ -41,7 +41,7 @@ namespace CarWashManagementSystem.Services
         }
         private async Task CallProvisionEndpointAsync(string url)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient("nonStandardHttpClient");
             var response = await client.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)

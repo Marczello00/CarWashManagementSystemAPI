@@ -13,7 +13,10 @@ builder.Services.AddControllers();
 
 // Automapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("nonStandardHttpClient", client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
 
 // Provisioning Service and filter
 builder.Services.AddScoped<IStationService, StationsProvisionService>();
