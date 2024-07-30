@@ -18,14 +18,18 @@ namespace CarWashManagementSystem.Filters
         {
             var resultContext = await next();
 
-            try
+            // Uruchomienie asynchronicznego zadania w tle bez oczekiwania na jego zakończenie
+            _ = Task.Run(async () =>
             {
-                await _stationService.ProvisionActiveStationsAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error during provisioning: {ex.Message}");
-            }
+                try
+                {
+                    await _stationService.ProvisionActiveStationsAsync();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error during provisioning: {ex.Message}");
+                }
+            });
         }
     }
 }
