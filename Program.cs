@@ -23,6 +23,9 @@ builder.Services.AddScoped<ProvisioningActionFilter>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Logging to console
+builder.Services.AddLogging(logging => logging.AddSystemdConsole());
+
 // Database MySQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DataContext>(options =>
