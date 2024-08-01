@@ -20,6 +20,7 @@ namespace CarWashManagementSystem.Controllers
         }
 
         [HttpGet]
+        [AllowStationIp]
         [ProducesResponseType(200, Type = typeof(StationStatusDto))]
         [ProducesResponseType(404)]
         public IActionResult GetStationStatus(short stationNumber, string stationTypeName)

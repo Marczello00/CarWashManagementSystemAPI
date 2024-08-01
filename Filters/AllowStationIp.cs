@@ -27,16 +27,30 @@ namespace CarWashManagementSystem.Filters
             }
 
             // Pobierz StationId z parametrów akcji
-            if (!context.ActionArguments.TryGetValue("createTransactionDto", out var value) || value is not CreateTransactionDto createTransactionDto)
+            int stationId;
+            string stationTypeName;
+
+            if (context.ActionArguments.TryGetValue("createTransactionDto", out var value) && value is CreateTransactionDto createTransactionDto)
+            {
+                stationId = createTransactionDto.StationNumber;
+                stationTypeName = createTransactionDto.StationTypeName;
+            }
+            else if (context.ActionArguments.TryGetValue("stationNumber", out var value1) && value1 is int &&
+                context.ActionArguments.TryGetValue("stationTypeName", out var value2) && value2 is string)
+            {
+                stationId = (int)value1;
+                stationTypeName = (string)value2;
+            }
+            else
             {
                 context.Result = new BadRequestResult();
                 return;
             }
 
             var station = dbContext.Stations
-                .Include(s => s.StationType)
-                .FirstOrDefault(s => s.StationNumber == createTransactionDto.StationNumber &&
-                                     s.StationType.StationTypeName == createTransactionDto.StationTypeName);
+                        .Include(s => s.StationType)
+                        .FirstOrDefault(s => s.StationNumber == (int)stationId &&
+                                             s.StationType.StationTypeName == (string)stationTypeName);
 
             if (station == null)
             {
