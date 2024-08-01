@@ -31,7 +31,6 @@ namespace CarWashManagementSystem.Controllers
         [Authorize(Roles = UserRoles.Owner)]
         public IActionResult GetStations()
         {
-            //TODO different result based on role! and add set activity endpoint
             var stations = _context.Stations
                 .Include(s => s.StationType)
                 .ToList();
