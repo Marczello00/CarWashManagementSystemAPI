@@ -4,12 +4,15 @@ using AutoMapper;
 using CarWashManagementSystem.Data;
 using CarWashManagementSystem.Dtos;
 using CarWashManagementSystem.Filters;
+using Microsoft.AspNetCore.Authorization;
+using CarWashManagementSystem.Constants;
 
 namespace CarWashManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StationAllowedIpController:ControllerBase
+    [Authorize]
+    public class StationAllowedIpController : ControllerBase
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -19,6 +22,7 @@ namespace CarWashManagementSystem.Controllers
             _mapper = mapper;
         }
         [HttpGet]
+        [Authorize(Roles = UserRoles.Admin)]
         [ProducesResponseType(200, Type = typeof(IEnumerable<StationAllowedIpDto>))]
         [ProducesResponseType(204)]
         public IActionResult GetStationAllowedIps()
@@ -32,6 +36,7 @@ namespace CarWashManagementSystem.Controllers
             return Ok(mapped);
         }
         [HttpPut("{StationId}")]
+        [Authorize(Roles = UserRoles.Admin)]
         [ServiceFilter(typeof(ProvisioningActionFilter))]
         [ProducesResponseType(200, Type = typeof(StationAllowedIpDto))]
         [ProducesResponseType(404)]

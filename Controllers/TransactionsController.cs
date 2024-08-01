@@ -5,11 +5,14 @@ using CarWashManagementSystem.Data;
 using CarWashManagementSystem.Models;
 using CarWashManagementSystem.Dtos;
 using CarWashManagementSystem.Filters;
+using Microsoft.AspNetCore.Authorization;
+using CarWashManagementSystem.Constants;
 
 namespace CarWashManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TransactionsController : ControllerBase
     {
         private readonly DataContext _context;
@@ -22,6 +25,7 @@ namespace CarWashManagementSystem.Controllers
             _logger = logger;
         }
         [HttpGet]
+        [Authorize(Roles = UserRoles.Owner)]
         [ProducesResponseType(200, Type = typeof(IEnumerable<TransactionDto>))]
         [ProducesResponseType(204)]
         public IActionResult GetLastFive()
@@ -44,6 +48,7 @@ namespace CarWashManagementSystem.Controllers
             return Ok(mapped);
         }
         [HttpGet("{id}")]
+        [Authorize(Roles = UserRoles.Owner)]
         [ProducesResponseType(200, Type = typeof(TransactionDto))]
         [ProducesResponseType(404)]
         public IActionResult GetTransactionById(long id)
@@ -61,6 +66,7 @@ namespace CarWashManagementSystem.Controllers
             return Ok(mapped);
         }
         [HttpGet("station/{stationId}")]
+        [Authorize(Roles = UserRoles.Owner)]
         [ProducesResponseType(200, Type = typeof(IEnumerable<TransactionDto>))]
         [ProducesResponseType(204)]
         public IActionResult GetTransactionsByStationId(long stationId)
@@ -79,6 +85,7 @@ namespace CarWashManagementSystem.Controllers
             return Ok(mapped);
         }
         [HttpGet("stationType/{stationTypeId}")]
+        [Authorize(Roles = UserRoles.Owner)]
         [ProducesResponseType(200, Type = typeof(IEnumerable<TransactionDto>))]
         [ProducesResponseType(204)]
         public IActionResult GetTransactionsByStationTypeId(long stationTypeId)
@@ -97,6 +104,7 @@ namespace CarWashManagementSystem.Controllers
             return Ok(mapped);
         }
         [HttpGet("source/{sourceId}")]
+        [Authorize(Roles = UserRoles.Owner)]
         [ProducesResponseType(200, Type = typeof(IEnumerable<TransactionDto>))]
         [ProducesResponseType(204)]
         public IActionResult GetTransactionsBySourceId(long sourceId)
@@ -118,6 +126,7 @@ namespace CarWashManagementSystem.Controllers
         }
         [HttpPost]
         [AllowStationIp]
+        [AllowAnonymous]
         [ProducesResponseType(201, Type = typeof(TransactionDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
