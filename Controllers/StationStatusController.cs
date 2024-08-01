@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using CarWashManagementSystem.Data;
 using CarWashManagementSystem.Dtos;
+using CarWashManagementSystem.Filters;
 
 namespace CarWashManagementSystem.Controllers
 {
