@@ -1,5 +1,7 @@
 ﻿using CarWashManagementSystem.Models;
 using CarWashManagementSystem.Data;
+using Microsoft.AspNetCore.Identity;
+using CarWashManagementSystem.Constants;
 namespace CarWashManagementSystem
 {
     public class Seed
@@ -67,6 +69,19 @@ namespace CarWashManagementSystem
                     new StationAllowedIp { Id = 7, StationId = 7, IpAddress = "192.168.1.30" },
                     new StationAllowedIp { Id = 8, StationId = 8, IpAddress = "192.168.1.30" },
                     new StationAllowedIp { Id = 9, StationId = 9, IpAddress = "192.168.1.30" }
+                );
+            }
+            if(!dataContext.Roles.Any())
+            {
+                dataContext.Roles.AddRange(
+                    new IdentityRole(UserRoles.Admin)
+                    {
+                        NormalizedName = UserRoles.Admin.ToUpper()
+                    },
+                    new IdentityRole(UserRoles.Owner)
+                    {
+                        NormalizedName = UserRoles.Owner.ToUpper()
+                    }
                 );
             }
             dataContext.SaveChanges();

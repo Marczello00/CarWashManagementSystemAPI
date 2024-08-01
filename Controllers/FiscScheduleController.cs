@@ -3,11 +3,14 @@ using AutoMapper;
 using CarWashManagementSystem.Data;
 using CarWashManagementSystem.Dtos;
 using CarWashManagementSystem.Filters;
+using Microsoft.AspNetCore.Authorization;
+using CarWashManagementSystem.Constants;
 
 namespace CarWashManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FiscScheduleController : ControllerBase
     {
         private readonly DataContext _context;
@@ -19,6 +22,7 @@ namespace CarWashManagementSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = UserRoles.Owner)]
         [ProducesResponseType(200, Type = typeof(IEnumerable<FiscScheduleDto>))]
         [ProducesResponseType(204)]
         public IActionResult GetFiscSchedule()
@@ -33,6 +37,7 @@ namespace CarWashManagementSystem.Controllers
         }
 
         [HttpPut("{DayOfWeek}")]
+        [Authorize(Roles = UserRoles.Owner)]
         [ServiceFilter(typeof(ProvisioningActionFilter))]
         [ProducesResponseType(200, Type = typeof(FiscScheduleDto))]
         [ProducesResponseType(404)]

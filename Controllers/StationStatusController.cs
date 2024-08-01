@@ -3,11 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using CarWashManagementSystem.Data;
 using CarWashManagementSystem.Dtos;
+using Microsoft.AspNetCore.Authorization;
+using CarWashManagementSystem.Constants;
+using CarWashManagementSystem.Filters;
 
 namespace CarWashManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class StationStatusController : ControllerBase
     {
         private readonly DataContext _context;
@@ -21,6 +25,7 @@ namespace CarWashManagementSystem.Controllers
 
         [HttpGet]
         [AllowStationIp]
+        [AllowAnonymous]
         [ProducesResponseType(200, Type = typeof(StationStatusDto))]
         [ProducesResponseType(404)]
         public IActionResult GetStationStatus(short stationNumber, string stationTypeName)

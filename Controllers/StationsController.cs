@@ -5,11 +5,14 @@ using CarWashManagementSystem.Data;
 using CarWashManagementSystem.Dtos;
 using CarWashManagementSystem.Interfaces;
 using CarWashManagementSystem.Filters;
+using Microsoft.AspNetCore.Authorization;
+using CarWashManagementSystem.Constants;
 
 namespace CarWashManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class StationsController : ControllerBase
     {
         private readonly DataContext _context;
@@ -25,8 +28,10 @@ namespace CarWashManagementSystem.Controllers
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<StationInfoDto>))]
         [ProducesResponseType(204)]
+        [Authorize(Roles = UserRoles.Owner)]
         public IActionResult GetStations()
         {
+            //TODO different result based on role! and add set activity endpoint
             var stations = _context.Stations
                 .Include(s => s.StationType)
                 .ToList();
@@ -39,6 +44,7 @@ namespace CarWashManagementSystem.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = UserRoles.Owner)]
         [ServiceFilter(typeof(ProvisioningActionFilter))]
         [ProducesResponseType(200, Type = typeof(StationInfoDto))]
         [ProducesResponseType(404)]
