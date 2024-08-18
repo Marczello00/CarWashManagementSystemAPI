@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 namespace CarWashManagementSystem.Controllers
 {
     [ApiController]
-    [Route("api/identity")]
+    [Route("v1/identity")]
     [Authorize]
     public class AccountController : ControllerBase
     {

@@ -10,7 +10,7 @@ using CarWashManagementSystem.Constants;
 
 namespace CarWashManagementSystem.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("v1/[controller]")]
     [ApiController]
     [Authorize]
     public class StationsController : ControllerBase
