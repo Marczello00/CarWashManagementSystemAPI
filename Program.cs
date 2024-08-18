@@ -98,10 +98,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapControllers();
-
-
-app.MapGroup("api/identity")
+app.MapGroup("v1/identity")
     .WithTags("Account")
     .MapIdentityApi<IdentityUser>();
 

@@ -10,7 +10,7 @@ using CarWashManagementSystem.Filters;
 
 namespace CarWashManagementSystem.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("v1/[controller]")]
     [ApiController]
     [Authorize]
     public class StationStatusController : ControllerBase
