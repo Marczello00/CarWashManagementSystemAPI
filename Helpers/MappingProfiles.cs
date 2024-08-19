@@ -26,6 +26,9 @@ namespace CarWashManagementSystem.Helpers
             CreateMap<UpdateFiscScheduleDto, FiscSchedule>();
             CreateMap<StationAllowedIp, StationAllowedIpDto>();
             CreateMap<UpdateStationAllowedIpDto, StationAllowedIp>();
+            CreateMap<Station, MainPageDataDto>()
+                .ForMember(dest => dest.IpAddress, opt => opt.MapFrom(src => src.AllowedIp.IpAddress))
+                .ForMember(dest => dest.StationTypeName, opt => opt.MapFrom(src => src.StationType.StationTypeName));
         }
     }
 }
