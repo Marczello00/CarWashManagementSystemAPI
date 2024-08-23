@@ -58,6 +58,12 @@ namespace CarWashManagementSystem.Controllers
                 station.TodaysRevenue = todaysRevenue;
 
                 var stationName = station.StationTypeName[0] + station.StationNumber.ToString();
+
+                if (station.StationTypeName == "Myjnia")
+                {
+                    stationName = "S" + station.StationNumber.ToString();
+                }
+
                 station.StationName = stationName;
 
                 var task = Task.Run(async () =>
