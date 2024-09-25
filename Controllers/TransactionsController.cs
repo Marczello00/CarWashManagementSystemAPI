@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AutoMapper;
+﻿using AutoMapper;
+using CarWashManagementSystem.Constants;
 using CarWashManagementSystem.Data;
-using CarWashManagementSystem.Models;
 using CarWashManagementSystem.Dtos;
 using CarWashManagementSystem.Filters;
+using CarWashManagementSystem.Models;
 using Microsoft.AspNetCore.Authorization;
-using CarWashManagementSystem.Constants;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Text;
+using System.Text.Json;
 
 namespace CarWashManagementSystem.Controllers
 {
@@ -18,11 +20,13 @@ namespace CarWashManagementSystem.Controllers
         private readonly DataContext _context;
         private readonly IMapper _mapper;
         private readonly ILogger<TransactionsController> _logger;
-        public TransactionsController(DataContext context, IMapper mapper, ILogger<TransactionsController> logger)
+        private readonly IHttpClientFactory _clientFactory;
+        public TransactionsController(DataContext context, IMapper mapper, ILogger<TransactionsController> logger, IHttpClientFactory clientFactory)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+            _clientFactory = clientFactory;
         }
         [HttpGet]
         [Authorize(Roles = UserRoles.Owner)]
@@ -138,7 +142,6 @@ namespace CarWashManagementSystem.Controllers
             if (createTransactionDto == null)
                 return BadRequest("Invalid data.");
 
-            // Znajdź odpowiednią stację na podstawie StationNumber i StationTypeName
             var station = _context.Stations
                 .Include(s => s.StationType)
                 .FirstOrDefault(s => s.StationNumber == createTransactionDto.StationNumber &&
@@ -146,7 +149,6 @@ namespace CarWashManagementSystem.Controllers
             if (station == null)
                 return NotFound("Station not found.");
 
-            // Znajdź odpowiednie źródło transakcji na podstawie TransactionSourceName
             var transactionSource = _context.TransactionSources
                 .FirstOrDefault(ts => ts.SourceName == createTransactionDto.TransactionSourceName);
             if (transactionSource == null)
@@ -155,7 +157,7 @@ namespace CarWashManagementSystem.Controllers
 
             var transaction = new Transaction
             {
-                DateTime = DateTime.Now,  // Ustaw bieżącą datę i godzinę
+                DateTime = DateTime.Now,
                 WasFiscalized = createTransactionDto.WasFiscalized,
                 Value = createTransactionDto.Value,
                 StationId = station.Id,
@@ -166,6 +168,46 @@ namespace CarWashManagementSystem.Controllers
             _context.SaveChanges();
             var transactionDto = _mapper.Map<TransactionDto>(transaction);
             return CreatedAtAction(nameof(GetTransactionById), new { id = transaction.Id }, transactionDto);
+
+        }
+        [HttpPost("make-transaction")]
+        [Authorize(Roles = UserRoles.Owner)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(502)]
+        public async Task<IActionResult> MakeTransaction(int stationId, int amount)
+        {
+            if (amount < 1 || amount > 20)
+            {
+                return BadRequest("Amount should be between 1-20");
+            }
+            var station = _context.Stations.Include(s => s.AllowedIp)
+                .FirstOrDefault(s => s.Id == stationId);
+            if (station == null || !station.IsActive)
+            {
+                return BadRequest("Station is not active");
+            }
+            var stationIp = station.AllowedIp.IpAddress;
+            var url = $"http://{stationIp}/transaction";
+            var client = _clientFactory.CreateClient("nonStandardHttpClient");
+            var json = JsonSerializer.Serialize(new { creditCount = amount });
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            try
+            {
+                var response = await client.PostAsync(url, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Transaction failed");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(502, e.Message);
+            }
 
         }
 
